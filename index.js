@@ -5,6 +5,7 @@ var store = require('react-native-simple-store');
 var NavigationBar = require('react-native-navbar');
 
 var {
+  // 使用Navigator在应用的不同界面中穿越
   Navigator,
   StatusBarIOS,
   StyleSheet,
@@ -199,14 +200,26 @@ var Finance = React.createClass({
   },
 
   render: function() {
+    /*
+      Navigator的renderScene属性接受function(route, navigator)形式的返回一个UI元素的函数
+      (route, navigator) => <View balabala />
+     */
     var renderScene = Platform.OS === 'ios' ? this.renderSceneIOS: this.renderSceneAndroid;
+    /*
+      Navigator在切换界面时的动画效果属性接受function(route)形式的反回类似于
+      Navigator.SceneConfigs.FloatFromRight的元素的函数。
+      (route) => Navigator.SceneConfigs.FloatFromRight
+     */
     var configureScene = Platform.OS === 'ios' ? this.configureSceneIOS: this.configureSceneAndroid;
 
     return (
       <Navigator
         debugOverlay={false}
+        // 初始化一个初始界面，用id来identify
         initialRoute={{title: 'Finance', id: 'stocks'}}
+        // 新页面加载方式
         configureScene={configureScene}
+        // 新页面绘制方式
         renderScene={renderScene}
       />
     );
@@ -214,3 +227,19 @@ var Finance = React.createClass({
 });
 
 module.exports = Finance;
+/**
+ * Navigator 的方法
+ *  
+ * getCurrentRoutes() - returns the current list of routes
+ * jumpBack() - Jump backward without unmounting the current scene
+ * jumpForward() - Jump forward to the next scene in the route stack
+ * jumpTo(route) - Transition to an existing scene without unmounting
+ * push(route) - Navigate forward to a new scene, squashing any scenes that you could jumpForward to
+ * pop() - Transition back and unmount the current scene
+ * replace(route) - Replace the current scene with a new route
+ * replaceAtIndex(route, index) - Replace a scene as specified by an index
+ * replacePrevious(route) - Replace the previous scene
+ * immediatelyResetRouteStack(routeStack) - Reset every scene with an array of routes
+ * popToRoute(route) - Pop to a particular scene, as specified by its route. All scenes after it will be unmounted
+ * popToTop() - Pop to the first scene in the stack, unmounting every other scene
+ */
